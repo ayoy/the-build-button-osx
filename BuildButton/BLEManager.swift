@@ -9,14 +9,28 @@
 import CoreBluetooth
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+
+    var buttonDidTrigger: ((BLEManager) -> Void)? = nil
     
+    static let shared = BLEManager()
+
     var peripheral: CBPeripheral? = nil
     var centralManager: CBCentralManager? = nil
     var services: [CBService] = []
     var idleCharacteristic: CBCharacteristic? = nil
-    
-    var buttonDidTrigger: ((BLEManager) -> Void)? = nil
 
+    func notifyFinishedTask() {
+        setIdle()
+    }
+    
+    func setIdle() {
+        if let idle = idleCharacteristic, let peripheral = peripheral {
+            var data = Data()
+            data.append(contentsOf: [1])
+            peripheral.writeValue(data, for: idle, type: .withResponse)
+        }
+    }
+    
     override init() {
         super.init()
         centralManager = CBCentralManager(delegate: self, queue: nil)
@@ -26,10 +40,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         centralManager?.stopScan()
     }
     
-    func notifyFinishedTask() {
-        setIdle()
-    }
-
+    // MARK: - CBCentralManagerDelegate
+    
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         print("state: \(central.state.rawValue)")
         if central.state == .poweredOn {
@@ -52,6 +64,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         peripheral.discoverServices(nil)
     }
     
+    // MARK: - CBPeripheralDelegate
+    
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if let services = peripheral.services {
             print("did discover services: \(services)")
@@ -70,21 +84,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         idleCharacteristic = service.characteristics?.first { $0.properties.contains(.write) }
         setIdle()
     }
-    
-    func setIdle() {
-        if let idle = idleCharacteristic, let peripheral = peripheral {
-            var data = Data()
-            data.append(contentsOf: [1])
-            peripheral.writeValue(data, for: idle, type: .withResponse)
-        }
-    }
-    
-    //    func peripheral(_ peripheral: CBPeripheral, didDiscoverDescriptorsFor characteristic: CBCharacteristic, error: Error?) {
-    //        print("didDiscoverDescriptorsFor: \(characteristic)")
-    //        if let descriptor = characteristic.descriptors?.first {
-    //            print(descriptor)
-    //        }
-    //    }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         print("didWriteValueForCharacteristic: \(characteristic)")

@@ -15,15 +15,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private(set) var statusItem: NSStatusItem! = nil
     private var eventMonitor: EventMonitor! = nil
     private let preferencesViewController = PreferencesViewController.freshController()
-
-    private(set) var bleManager: BLEManager!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         statusItem?.image = NSImage(named: NSImage.Name("statusItem"))
         statusItem?.button?.action = #selector(togglePopover(_:))
 
-        popover.contentViewController = PreferencesViewController.freshController()
+        popover.contentViewController = preferencesViewController
 
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown])
         { [weak self] event in
@@ -31,20 +29,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 strongSelf.closePopover(sender: event)
             }
         }
-
-        bleManager = BLEManager()
         
-        bleManager.buttonDidTrigger = { manager in
-            self.preferencesViewController.statusButton.title = "Finish running task"
+        BLEManager.shared.buttonDidTrigger = { manager in
+            self.preferencesViewController.statusButtonTitle = "Finish running task"
         }
-    }
-    
-    @objc private func finishTask(_ sender: NSMenuItem) {
-        bleManager.notifyFinishedTask()
-    }
-    
-    @objc private func quit(_ sender: NSMenuItem) {
-        NSApp.terminate(sender)
     }
     
     @objc func togglePopover(_ sender: Any?) {
@@ -67,4 +55,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         eventMonitor.stop()
     }
 }
-

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+
+<dictionary title="ScriptTest Terminology">
+    
+    <suite name="BuildButton Suite" code="????" description="BuildButton specific classes.">
+        <command name="finish" code="bbfinish" description="Finish current task.">
+            <cocoa class="BuildButton.FinishCommand"/>
+        </command>
+        
+    </suite>
+    
+</dictionary>
+

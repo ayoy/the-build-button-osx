@@ -30,6 +30,10 @@
 	<string>Main</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
+	<key>OSAScriptingDefinition</key>
+	<string>BuildButton.sdef</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

@@ -9,11 +9,13 @@
 import Cocoa
 
 class PreferencesViewController: NSViewController {
-    @IBOutlet private(set) weak var statusButton: NSButton!
+    var statusButtonTitle: String = "Idle"
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        statusButton.title = "Idle"
+    @IBOutlet private weak var statusButton: NSButton!
+
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        statusButton.title = statusButtonTitle
     }
     
     @IBAction func quit(_ sender: NSButton) {
@@ -28,6 +30,7 @@ class PreferencesViewController: NSViewController {
         } else {
             print("Task finished")
             sender.title = "Idle"
+            BLEManager.shared.notifyFinishedTask()
 //            sender.isEnabled = true
         }
         sender.sizeToFit()
