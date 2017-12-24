@@ -688,9 +688,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NYT-WS-Qow">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NYT-WS-Qow">
                                 <rect key="frame" x="323" y="13" width="143" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Quit Build Button" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="Zrg-Tn-0GF">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -699,8 +698,27 @@
                                     <action selector="quit:" target="qCG-w9-BFY" id="6lU-lW-Ymm"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-aY-sQY">
+                                <rect key="frame" x="194" y="117" width="93" height="32"/>
+                                <buttonCell key="cell" type="push" title="Run task" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Bv-ht-Pju">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="runTask:" target="qCG-w9-BFY" id="TaX-fd-GH7"/>
+                                </connections>
+                            </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="NYT-WS-Qow" secondAttribute="trailing" constant="20" id="G9d-8v-jKG"/>
+                            <constraint firstItem="Bqa-aY-sQY" firstAttribute="centerX" secondItem="b2a-4A-Iyw" secondAttribute="centerX" id="a6K-mL-9UY"/>
+                            <constraint firstItem="Bqa-aY-sQY" firstAttribute="centerY" secondItem="b2a-4A-Iyw" secondAttribute="centerY" id="iJv-CU-A8c"/>
+                            <constraint firstAttribute="bottom" secondItem="NYT-WS-Qow" secondAttribute="bottom" constant="20" id="tux-We-y6m"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="statusButton" destination="Bqa-aY-sQY" id="h2G-Vp-jw2"/>
+                    </connections>
                 </viewController>
                 <customObject id="Hfl-U6-k0T" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

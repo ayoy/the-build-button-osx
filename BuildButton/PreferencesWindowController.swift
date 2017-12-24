@@ -9,13 +9,28 @@
 import Cocoa
 
 class PreferencesViewController: NSViewController {
+    @IBOutlet private(set) weak var statusButton: NSButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        statusButton.title = "Idle"
     }
     
-    @IBAction func quit(_ sender: Any) {
+    @IBAction func quit(_ sender: NSButton) {
         NSApp.terminate(sender)
+    }
+
+    @IBAction func runTask(_ sender: NSButton) {
+        if (sender.title == "Idle") {
+            print("Running task")
+//            sender.isEnabled = false
+            sender.title = "Finish running task"
+        } else {
+            print("Task finished")
+            sender.title = "Idle"
+//            sender.isEnabled = true
+        }
+        sender.sizeToFit()
     }
 
 }

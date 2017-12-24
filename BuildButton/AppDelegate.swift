@@ -14,11 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let popover = NSPopover()
     private(set) var statusItem: NSStatusItem! = nil
     private var eventMonitor: EventMonitor! = nil
-
-    private let menuItem: NSMenuItem = {
-        let item = NSMenuItem(title: "Idle", action: nil, keyEquivalent: "")
-        return item
-    }()
+    private let preferencesViewController = PreferencesViewController.freshController()
 
     private(set) var bleManager: BLEManager!
     
@@ -39,27 +35,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         bleManager = BLEManager()
         
         bleManager.buttonDidTrigger = { manager in
-            self.menuItem.title = "Finish task"
-            self.menuItem.action = #selector(self.finishTask(_:))
+            self.preferencesViewController.statusButton.title = "Finish running task"
         }
     }
     
-//    private func constructMenu() {
-//        let menu = NSMenu()
-//        menu.addItem(menuItem)
-//        menu.addItem(.separator())
-//        menu.addItem(NSMenuItem(title: "Preferences", action: #selector(showPreferences(_:)),
-//                                keyEquivalent: ""))
-//        menu.addItem(NSMenuItem(title: "Quit", action: #selector(quit(_:)),
-//                                keyEquivalent: ""))
-//        statusItem?.menu = menu
-//    }
-
-    
     @objc private func finishTask(_ sender: NSMenuItem) {
         bleManager.notifyFinishedTask()
-        menuItem.title = "Idle"
-        menuItem.target = nil
     }
     
     @objc private func quit(_ sender: NSMenuItem) {
