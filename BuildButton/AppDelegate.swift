@@ -8,6 +8,17 @@
 
 import Cocoa
 
+extension ButtonClient.State {
+    var statusItemIconName: String {
+        switch self {
+        case .running:
+            return "running"
+        default:
+            return "idle"
+        }
+    }
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
 
@@ -25,7 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem?.image = NSImage(named: NSImage.Name("statusItem"))
+        statusItem?.image = NSImage(named: NSImage.Name("idle"))
         statusItem?.button?.action = #selector(togglePopover(_:))
 
         popover.contentViewController = preferencesViewController
@@ -64,6 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
     
     func buttonDidConnect(_ manager: BLEManager) {
         button.state = .idle
+        statusItem?.image = NSImage(named: NSImage.Name(button.state.statusItemIconName))
         preferencesViewController.reloadUI(withButton: button)
     }
 
@@ -75,11 +87,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
     
     func buttonDidDisconnect(_ manager: BLEManager) {
         button.state = .offline
+        statusItem?.image = NSImage(named: NSImage.Name(button.state.statusItemIconName))
         preferencesViewController.reloadUI(withButton: button)
     }
     
     func buttonPushed(_ manager: BLEManager) {
         button.state = .running
+        statusItem?.image = NSImage(named: NSImage.Name(button.state.statusItemIconName))
         preferencesViewController.statusButtonTitle = "Finish running task"
         preferencesViewController.reloadUI(withButton: button)
         button.runCommand("cd projects && sleep 3")
@@ -88,6 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
     
     func buttonDidFinishTask(_ manager: BLEManager) {
         button.state = .idle
+        statusItem?.image = NSImage(named: NSImage.Name(button.state.statusItemIconName))
         preferencesViewController.reloadUI(withButton: button)
     }
 }
