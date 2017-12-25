@@ -8,19 +8,42 @@
 
 import CoreBluetooth
 
+protocol BLEManagerDelegate: class {
+    func didStartScanningForButton(_ manager: BLEManager)
+    func didStopScanningForButton(_ manager: BLEManager)
+    func buttonDidConnect(_ manager: BLEManager)
+    func buttonDidDisconnect(_ manager: BLEManager)
+    func buttonPushed(_ manager: BLEManager)
+    func buttonDidFinishTask(_ manager: BLEManager)
+}
+
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+
+    unowned var delegate: BLEManagerDelegate
 
     var buttonDidTrigger: ((BLEManager) -> Void)? = nil
     
-    static let shared = BLEManager()
-
-    var peripheral: CBPeripheral? = nil
-    var centralManager: CBCentralManager? = nil
-    var services: [CBService] = []
-    var idleCharacteristic: CBCharacteristic? = nil
+//    static let shared = BLEManager()
+    
+    private var peripheral: CBPeripheral? = nil
+    private var centralManager: CBCentralManager
+    private var services: [CBService] = []
+    private var idleCharacteristic: CBCharacteristic? = nil
 
     func notifyFinishedTask() {
         setIdle()
+        delegate.buttonDidFinishTask(self)
+    }
+    
+    @discardableResult
+    func startScanningForButton() -> Bool {
+        if centralManager.state == .poweredOn {
+            let serviceUUID = CBUUID(string: "00FF")
+            centralManager.scanForPeripherals(withServices: [serviceUUID], options: nil)
+            delegate.didStartScanningForButton(self)
+            return true
+        }
+        return false
     }
     
     func setIdle() {
@@ -31,22 +54,22 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
-    override init() {
+    init(delegate: BLEManagerDelegate) {
+        self.delegate = delegate
+        centralManager = CBCentralManager(delegate: nil, queue: nil)
         super.init()
-        centralManager = CBCentralManager(delegate: self, queue: nil)
+        centralManager.delegate = self
     }
     
     deinit {
-        centralManager?.stopScan()
+        centralManager.stopScan()
     }
     
     // MARK: - CBCentralManagerDelegate
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         print("state: \(central.state.rawValue)")
-        if central.state == .poweredOn {
-            centralManager?.scanForPeripherals(withServices: nil, options: nil)
-        }
+        startScanningForButton()
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -56,12 +79,19 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             peripheral.delegate = self
             central.connect(peripheral, options: nil)
             central.stopScan()
+            delegate.didStopScanningForButton(self)
         }
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("did connect!")
         peripheral.discoverServices(nil)
+    }
+    
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        print("did disconnect!")
+        delegate.buttonDidDisconnect(self)
+        startScanningForButton()
     }
     
     // MARK: - CBPeripheralDelegate
@@ -83,6 +113,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
         idleCharacteristic = service.characteristics?.first { $0.properties.contains(.write) }
         setIdle()
+        delegate.buttonDidConnect(self)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -98,6 +129,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
 //        print("value: \(string ?? "brak")")
         print("error: \(String(describing: error))")
 
+        delegate.buttonPushed(self)
         buttonDidTrigger?(self)
     }
     

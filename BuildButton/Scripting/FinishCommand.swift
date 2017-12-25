@@ -11,7 +11,8 @@ import Cocoa
 class FinishCommand: NSScriptCommand
 {
     override func performDefaultImplementation() -> Any? {
-        BLEManager.shared.notifyFinishedTask()
+        let appDelegate = NSApp.delegate as! AppDelegate
+        appDelegate.bleManager.notifyFinishedTask()
         return nil
     }
 }

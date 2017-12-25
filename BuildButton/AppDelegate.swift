@@ -9,12 +9,19 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
-    
+class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
+
     private let popover = NSPopover()
     private(set) var statusItem: NSStatusItem! = nil
     private var eventMonitor: EventMonitor! = nil
-    private let preferencesViewController = PreferencesViewController.freshController()
+    private lazy var preferencesViewController: PreferencesViewController = {
+        let vc = PreferencesViewController.freshController()
+        vc.button = self.button
+        return vc
+    }()
+
+    private let button = ButtonClient()
+    private(set) var bleManager: BLEManager!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -22,16 +29,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem?.button?.action = #selector(togglePopover(_:))
 
         popover.contentViewController = preferencesViewController
+        
+        bleManager = BLEManager(delegate: self)
 
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown])
         { [weak self] event in
             if let strongSelf = self, strongSelf.popover.isShown {
                 strongSelf.closePopover(sender: event)
             }
-        }
-        
-        BLEManager.shared.buttonDidTrigger = { manager in
-            self.preferencesViewController.statusButtonTitle = "Finish running task"
         }
     }
     
@@ -53,5 +58,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func closePopover(sender: Any?) {
         popover.performClose(sender)
         eventMonitor.stop()
+    }
+    
+    // MARK: - BLEManagerDelegate
+    
+    func buttonDidConnect(_ manager: BLEManager) {
+        button.state = .idle
+        preferencesViewController.reloadUI(withButton: button)
+    }
+
+    func didStartScanningForButton(_ manager: BLEManager) {
+    }
+    
+    func didStopScanningForButton(_ manager: BLEManager) {
+    }
+    
+    func buttonDidDisconnect(_ manager: BLEManager) {
+        button.state = .offline
+        preferencesViewController.reloadUI(withButton: button)
+    }
+    
+    func buttonPushed(_ manager: BLEManager) {
+        button.state = .running
+        preferencesViewController.statusButtonTitle = "Finish running task"
+        preferencesViewController.reloadUI(withButton: button)
+        button.runCommand("cd projects && sleep 3")
+//        button.runCommand("cd work/Base-iOS-client && bundle exec fastlane hockeyapp version:3.4.4_beta1")
+    }
+    
+    func buttonDidFinishTask(_ manager: BLEManager) {
+        button.state = .idle
+        preferencesViewController.reloadUI(withButton: button)
     }
 }

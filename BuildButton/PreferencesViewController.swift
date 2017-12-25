@@ -8,14 +8,36 @@
 
 import Cocoa
 
+extension ButtonClient.State {
+    var statusButtonTitle: String {
+        switch self {
+        case .offline:
+            return "Button is offline"
+        case .idle:
+            return "Run a task"
+        case .running:
+            return "Running task"
+        }
+    }
+}
+
 class PreferencesViewController: NSViewController {
     var statusButtonTitle: String = "Idle"
+    weak var button: ButtonClient? = nil
 
     @IBOutlet private weak var statusButton: NSButton!
-
+    
+    func reloadUI(withButton button: ButtonClient) {
+        if view.window != nil {
+            statusButton.title = button.state.statusButtonTitle
+            statusButton.isEnabled = button.state != .offline
+        }
+    }
+    
     override func viewWillAppear() {
         super.viewWillAppear()
-        statusButton.title = statusButtonTitle
+        guard let button = button else { fatalError("button not set for preferences") }
+        reloadUI(withButton: button)
     }
     
     @IBAction func quit(_ sender: NSButton) {
@@ -25,37 +47,18 @@ class PreferencesViewController: NSViewController {
     @IBAction func runTask(_ sender: NSButton) {
         if (sender.title == "Idle") {
             print("Running task")
-            runCommand("cd projects; sleep 10")
+            button?.runCommand("cd projects; sleep 3")
 //            sender.isEnabled = false
             sender.title = "Finish running task"
         } else {
             print("Task finished")
             sender.title = "Idle"
-            BLEManager.shared.notifyFinishedTask()
+            let finishCommand = FinishCommand()
+            finishCommand.execute()
 //            sender.isEnabled = true
         }
         sender.sizeToFit()
     }
-    
-    func runCommand(_ command: String) {
-        guard let scriptURL = Bundle.main.url(forResource: "run_in_terminal", withExtension: "scpt") else { fatalError("run_in_terminal script not found") }
-
-        let scriptData = try! Data(contentsOf: scriptURL)
-        guard var scriptString = String(bytes: scriptData, encoding: .utf8) else { fatalError("failed to read run_in_terminal script") }
-        
-        let argument = "\(command); osascript -e 'tell application \\\"BuildButton\\\"' -e 'finish' -e 'end tell'"
-        scriptString.append("runSimple(\"\(argument)\")")
-
-        guard let script = NSAppleScript(source: scriptString)
-            else { fatalError("failed to initialize Apple Script with given source") }
-
-        var error: NSDictionary? = nil
-        script.executeAndReturnError(&error)
-        if let error = error {
-            print("Error while executing Apple Script: \(error)")
-        }
-    }
-
 }
 
 extension PreferencesViewController {
@@ -64,7 +67,7 @@ extension PreferencesViewController {
         guard let storyboard = NSStoryboard.main else { fatalError("Main Storyboard not found") }
         let identifier = NSStoryboard.SceneIdentifier(rawValue: "PreferencesViewController")
         guard let viewcontroller = storyboard.instantiateController(withIdentifier: identifier) as? PreferencesViewController else {
-            fatalError("Why cant i find QuotesViewController? - Check Main.storyboard")
+            fatalError("Why cant i find PreferencesViewController? - Check Main.storyboard")
         }
         return viewcontroller
     }

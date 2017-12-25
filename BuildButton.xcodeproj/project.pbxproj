@@ -11,6 +11,7 @@
 		377570831FEF98EE0087D487 /* BuildButton.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 377570821FEF98EE0087D487 /* BuildButton.sdef */; };
 		377570861FEFD4540087D487 /* FinishCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377570851FEFD4540087D487 /* FinishCommand.swift */; };
 		377570881FEFD9860087D487 /* run_in_terminal.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 377570871FEFD9860087D487 /* run_in_terminal.scpt */; };
+		3775708A1FEFE32A0087D487 /* ButtonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377570891FEFE32A0087D487 /* ButtonClient.swift */; };
 		37BD31961FEDA151005AF17F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BD31951FEDA151005AF17F /* AppDelegate.swift */; };
 		37BD319A1FEDA151005AF17F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37BD31991FEDA151005AF17F /* Assets.xcassets */; };
 		37BD319D1FEDA151005AF17F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37BD319B1FEDA151005AF17F /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 		377570821FEF98EE0087D487 /* BuildButton.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = BuildButton.sdef; sourceTree = "<group>"; };
 		377570851FEFD4540087D487 /* FinishCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishCommand.swift; sourceTree = "<group>"; };
 		377570871FEFD9860087D487 /* run_in_terminal.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = run_in_terminal.scpt; sourceTree = "<group>"; };
+		377570891FEFE32A0087D487 /* ButtonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonClient.swift; sourceTree = "<group>"; };
 		37BD31921FEDA151005AF17F /* BuildButton.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BuildButton.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37BD31951FEDA151005AF17F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37BD31991FEDA151005AF17F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 		37BD31941FEDA151005AF17F /* BuildButton */ = {
 			isa = PBXGroup;
 			children = (
+				377570891FEFE32A0087D487 /* ButtonClient.swift */,
 				37BD31951FEDA151005AF17F /* AppDelegate.swift */,
 				377570841FEFD4420087D487 /* Scripting */,
 				37C1ADE71FEF338200430574 /* EventMonitor.swift */,
@@ -223,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37C1ADE61FEF305F00430574 /* PreferencesViewController.swift in Sources */,
+				3775708A1FEFE32A0087D487 /* ButtonClient.swift in Sources */,
 				375784DB1FEEEB0600EC9C18 /* BLEManager.swift in Sources */,
 				377570861FEFD4540087D487 /* FinishCommand.swift in Sources */,
 				37BD31961FEDA151005AF17F /* AppDelegate.swift in Sources */,
