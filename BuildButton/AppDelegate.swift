@@ -11,10 +11,12 @@ import Cocoa
 extension ButtonClient.State {
     var statusItemIconName: String {
         switch self {
+        case .offline:
+            return "offline"
+        case .idle:
+            return "idle"
         case .running:
             return "running"
-        default:
-            return "idle"
         }
     }
 }
@@ -36,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusItem?.image = NSImage(named: NSImage.Name("idle"))
+        statusItem?.image = NSImage(named: NSImage.Name("offline"))
         statusItem?.button?.action = #selector(togglePopover(_:))
 
         popover.contentViewController = preferencesViewController
@@ -96,7 +98,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
         statusItem?.image = NSImage(named: NSImage.Name(button.state.statusItemIconName))
         preferencesViewController.statusButtonTitle = "Finish running task"
         preferencesViewController.reloadUI(withButton: button)
-        button.runCommand("cd projects && sleep 3")
+        button.runCommand("cd projects && sleep 7")
 //        button.runCommand("cd work/Base-iOS-client && bundle exec fastlane hockeyapp version:3.4.4_beta1")
     }
     
