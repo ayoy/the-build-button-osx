@@ -8,19 +8,6 @@
 
 import Cocoa
 
-extension ButtonClient.State {
-    var statusItemIconName: String {
-        switch self {
-        case .offline:
-            return "offline"
-        case .idle:
-            return "idle"
-        case .running:
-            return "running"
-        }
-    }
-}
-
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
 

@@ -685,11 +685,11 @@
             <objects>
                 <viewController storyboardIdentifier="PreferencesViewController" id="qCG-w9-BFY" customClass="PreferencesViewController" customModule="BuildButton" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="b2a-4A-Iyw">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="378" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NYT-WS-Qow">
-                                <rect key="frame" x="323" y="13" width="143" height="32"/>
+                                <rect key="frame" x="221" y="13" width="143" height="32"/>
                                 <buttonCell key="cell" type="push" title="Quit Build Button" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="Zrg-Tn-0GF">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -699,7 +699,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-aY-sQY">
-                                <rect key="frame" x="194" y="117" width="93" height="32"/>
+                                <rect key="frame" x="128" y="13" width="93" height="32"/>
                                 <buttonCell key="cell" type="push" title="Run task" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Bv-ht-Pju">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -708,21 +708,104 @@
                                     <action selector="runTask:" target="qCG-w9-BFY" id="TaX-fd-GH7"/>
                                 </connections>
                             </button>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eFi-aG-3CP">
+                                <rect key="frame" x="20" y="186" width="64" height="64"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="fL1-0U-GAa"/>
+                                    <constraint firstAttribute="width" constant="64" id="ium-Op-XDv"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="idle-big" id="caQ-uJ-DmV"/>
+                            </imageView>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Es5-MR-Pqg">
+                                <rect key="frame" x="90" y="186" width="270" height="39"/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Type shell command(s) to be executed when button is pressed:" id="HQG-v9-iW3">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <scrollView verticalHuggingPriority="752" borderType="line" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z9A-c6-VSZ">
+                                <rect key="frame" x="20" y="61" width="338" height="117"/>
+                                <clipView key="contentView" id="YlJ-My-t0l">
+                                    <rect key="frame" x="1" y="1" width="336" height="115"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" id="3qe-aR-2i8">
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="115"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <size key="minSize" width="336" height="115"/>
+                                            <size key="maxSize" width="463" height="10000000"/>
+                                            <attributedString key="textStorage">
+                                                <fragment>
+                                                    <string key="content">echo "It works!"
+sleep 5
+</string>
+                                                    <attributes>
+                                                        <font key="NSFont" size="12" name="Menlo-Regular"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                        </textView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="8Vs-tt-52a">
+                                    <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="R0y-VK-Xjd">
+                                    <rect key="frame" x="321" y="1" width="16" height="115"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="L3z-Yq-uR0">
+                                <rect key="frame" x="90" y="233" width="270" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Button is now idle." id="BzK-xR-Qtx">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Es5-MR-Pqg" firstAttribute="leading" secondItem="L3z-Yq-uR0" secondAttribute="leading" id="0ys-1D-IuS"/>
+                            <constraint firstItem="z9A-c6-VSZ" firstAttribute="top" secondItem="Es5-MR-Pqg" secondAttribute="bottom" constant="8" id="1nl-vI-sHX"/>
+                            <constraint firstItem="eFi-aG-3CP" firstAttribute="top" secondItem="b2a-4A-Iyw" secondAttribute="top" constant="20" id="44Y-xr-kT5"/>
+                            <constraint firstItem="z9A-c6-VSZ" firstAttribute="top" secondItem="eFi-aG-3CP" secondAttribute="bottom" priority="750" constant="8" id="5fD-46-oh3"/>
+                            <constraint firstItem="NYT-WS-Qow" firstAttribute="top" secondItem="z9A-c6-VSZ" secondAttribute="bottom" constant="20" id="6gS-N8-ECL"/>
+                            <constraint firstItem="L3z-Yq-uR0" firstAttribute="top" secondItem="eFi-aG-3CP" secondAttribute="top" id="8wv-p3-h7h"/>
                             <constraint firstAttribute="trailing" secondItem="NYT-WS-Qow" secondAttribute="trailing" constant="20" id="G9d-8v-jKG"/>
-                            <constraint firstItem="Bqa-aY-sQY" firstAttribute="centerX" secondItem="b2a-4A-Iyw" secondAttribute="centerX" id="a6K-mL-9UY"/>
-                            <constraint firstItem="Bqa-aY-sQY" firstAttribute="centerY" secondItem="b2a-4A-Iyw" secondAttribute="centerY" id="iJv-CU-A8c"/>
+                            <constraint firstItem="NYT-WS-Qow" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="b2a-4A-Iyw" secondAttribute="leading" constant="20" symbolic="YES" id="Mpu-fC-lZg"/>
+                            <constraint firstItem="z9A-c6-VSZ" firstAttribute="trailing" secondItem="L3z-Yq-uR0" secondAttribute="trailing" id="P50-BK-5WS"/>
+                            <constraint firstItem="Es5-MR-Pqg" firstAttribute="trailing" secondItem="L3z-Yq-uR0" secondAttribute="trailing" id="Pgs-YL-r3D"/>
+                            <constraint firstItem="NYT-WS-Qow" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bqa-aY-sQY" secondAttribute="trailing" constant="12" symbolic="YES" id="Xpz-5t-lwm"/>
+                            <constraint firstItem="Bqa-aY-sQY" firstAttribute="leading" secondItem="b2a-4A-Iyw" secondAttribute="leading" constant="134" id="YV4-pR-Pje"/>
+                            <constraint firstItem="z9A-c6-VSZ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eFi-aG-3CP" secondAttribute="bottom" constant="8" id="fzX-T9-mjq"/>
+                            <constraint firstAttribute="trailing" secondItem="L3z-Yq-uR0" secondAttribute="trailing" constant="20" id="hDc-1V-z7D"/>
+                            <constraint firstItem="eFi-aG-3CP" firstAttribute="leading" secondItem="b2a-4A-Iyw" secondAttribute="leading" constant="20" id="jmX-wm-Qg9"/>
+                            <constraint firstItem="L3z-Yq-uR0" firstAttribute="leading" secondItem="eFi-aG-3CP" secondAttribute="trailing" constant="8" id="suL-35-8PP"/>
+                            <constraint firstItem="Es5-MR-Pqg" firstAttribute="top" secondItem="L3z-Yq-uR0" secondAttribute="bottom" constant="8" id="tKg-NR-Iq5"/>
+                            <constraint firstItem="NYT-WS-Qow" firstAttribute="centerY" secondItem="Bqa-aY-sQY" secondAttribute="centerY" id="tbO-zg-QYI"/>
                             <constraint firstAttribute="bottom" secondItem="NYT-WS-Qow" secondAttribute="bottom" constant="20" id="tux-We-y6m"/>
+                            <constraint firstItem="z9A-c6-VSZ" firstAttribute="leading" secondItem="eFi-aG-3CP" secondAttribute="leading" id="v9T-ck-84P"/>
+                            <constraint firstItem="z9A-c6-VSZ" firstAttribute="top" secondItem="Es5-MR-Pqg" secondAttribute="bottom" priority="750" constant="8" id="vXp-VE-SiT"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="statusButton" destination="Bqa-aY-sQY" id="h2G-Vp-jw2"/>
+                        <outlet property="statusIcon" destination="eFi-aG-3CP" id="o63-Kj-rXT"/>
+                        <outlet property="statusLabel" destination="L3z-Yq-uR0" id="G9F-wX-d4G"/>
+                        <outlet property="textView" destination="3qe-aR-2i8" id="7QI-bR-J2j"/>
                     </connections>
                 </viewController>
                 <customObject id="Hfl-U6-k0T" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="83" y="516"/>
+            <point key="canvasLocation" x="32" y="516"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="idle-big" width="128" height="128"/>
+    </resources>
 </document>

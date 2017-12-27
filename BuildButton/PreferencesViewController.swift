@@ -9,14 +9,14 @@
 import Cocoa
 
 extension ButtonClient.State {
-    var statusButtonTitle: String {
+    var statusLabelTitle: String {
         switch self {
         case .offline:
-            return "Button is offline"
+            return "Button is offline."
         case .idle:
-            return "Run a task"
+            return "Button is now idle."
         case .running:
-            return "Running task"
+            return "Button is currently running a task."
         }
     }
 }
@@ -25,11 +25,15 @@ class PreferencesViewController: NSViewController {
     var statusButtonTitle: String = "Idle"
     weak var button: ButtonClient? = nil
 
+    @IBOutlet private weak var statusLabel: NSTextField!
+    @IBOutlet private weak var statusIcon: NSImageView!
     @IBOutlet private weak var statusButton: NSButton!
-    
+    @IBOutlet private weak var textView: NSTextView!
+
     func reloadUI(withButton button: ButtonClient) {
         if view.window != nil {
-            statusButton.title = button.state.statusButtonTitle
+            statusLabel.cell?.title = button.state.statusLabelTitle
+            statusIcon.image = NSImage(named: NSImage.Name("\(button.state.statusItemIconName)-big"))
             statusButton.isEnabled = button.state != .offline
         }
     }

@@ -9,7 +9,21 @@
 import Cocoa
 
 class ButtonClient: NSObject {
-    enum State { case offline, idle, running }
+    enum State {
+        case offline, idle, running
+
+        var statusItemIconName: String {
+            switch self {
+            case .offline:
+                return "offline"
+            case .idle:
+                return "idle"
+            case .running:
+                return "running"
+            }
+        }
+
+    }
 
     var command: String? = nil
     var state: State = .offline
@@ -34,3 +48,4 @@ class ButtonClient: NSObject {
         }
     }
 }
+
