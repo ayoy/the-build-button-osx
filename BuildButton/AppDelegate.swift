@@ -16,6 +16,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
     private var eventMonitor: EventMonitor! = nil
     private lazy var preferencesViewController: PreferencesViewController = {
         let vc = PreferencesViewController.freshController()
+        vc.commands = self.button.commands.joined(separator: "\n")
+        vc.commandsDidChange = { [weak self] commands in
+            self?.button.commands = commands
+        }
         vc.button = self.button
         return vc
     }()
@@ -85,8 +89,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
         statusItem?.image = NSImage(named: NSImage.Name(button.state.statusItemIconName))
         preferencesViewController.statusButtonTitle = "Finish running task"
         preferencesViewController.reloadUI(withButton: button)
-        button.runCommand("cd projects && sleep 7")
-//        button.runCommand("cd work/Base-iOS-client && bundle exec fastlane hockeyapp version:3.5.2_rc2")
+        button.runCommand()
     }
     
     func buttonDidFinishTask(_ manager: BLEManager) {

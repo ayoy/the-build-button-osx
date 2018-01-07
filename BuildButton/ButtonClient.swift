@@ -25,17 +25,37 @@ class ButtonClient: NSObject {
 
     }
 
-    var command: String? = nil
+    private struct Const {
+        static let CommandsKey = "commands"
+    }
+    
+    override init() {
+        commands = UserDefaults.standard.stringArray(forKey: Const.CommandsKey) ?? []
+    }
+    
+    var commands: [String] = [] {
+        didSet {
+            if commands.isEmpty {
+                UserDefaults.standard.removeObject(forKey: Const.CommandsKey)
+            } else {
+                UserDefaults.standard.set(commands, forKey: Const.CommandsKey)
+            }
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
     var state: State = .offline
     
     
-    func runCommand(_ command: String) {
+    func runCommand(_ command: String? = nil) {
+        var commandToRun = command ?? commands.joined(separator: "; ")
+        commandToRun = commandToRun.replacingOccurrences(of: "\"", with: "\\\"");
         guard let scriptURL = Bundle.main.url(forResource: "run_in_terminal", withExtension: "scpt") else { fatalError("run_in_terminal script not found") }
         
         let scriptData = try! Data(contentsOf: scriptURL)
         guard var scriptString = String(bytes: scriptData, encoding: .utf8) else { fatalError("failed to read run_in_terminal script") }
         
-        let argument = "\(command); osascript -e 'tell application \\\"BuildButton\\\"' -e 'finish' -e 'end tell'"
+        let argument = "\(commandToRun); osascript -e 'tell application \\\"BuildButton\\\"' -e 'finish' -e 'end tell'"
         scriptString.append("runInTerminal(\"\(argument)\")")
         
         guard let script = NSAppleScript(source: scriptString)
