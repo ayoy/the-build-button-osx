@@ -699,8 +699,8 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bqa-aY-sQY">
-                                <rect key="frame" x="128" y="13" width="93" height="32"/>
-                                <buttonCell key="cell" type="push" title="Run task" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Bv-ht-Pju">
+                                <rect key="frame" x="103" y="13" width="118" height="32"/>
+                                <buttonCell key="cell" type="push" title="Reset button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Bv-ht-Pju">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -777,11 +777,10 @@ sleep 5
                             <constraint firstItem="NYT-WS-Qow" firstAttribute="top" secondItem="z9A-c6-VSZ" secondAttribute="bottom" constant="20" id="6gS-N8-ECL"/>
                             <constraint firstItem="L3z-Yq-uR0" firstAttribute="top" secondItem="eFi-aG-3CP" secondAttribute="top" id="8wv-p3-h7h"/>
                             <constraint firstAttribute="trailing" secondItem="NYT-WS-Qow" secondAttribute="trailing" constant="20" id="G9d-8v-jKG"/>
-                            <constraint firstItem="NYT-WS-Qow" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="b2a-4A-Iyw" secondAttribute="leading" constant="20" symbolic="YES" id="Mpu-fC-lZg"/>
                             <constraint firstItem="z9A-c6-VSZ" firstAttribute="trailing" secondItem="L3z-Yq-uR0" secondAttribute="trailing" id="P50-BK-5WS"/>
                             <constraint firstItem="Es5-MR-Pqg" firstAttribute="trailing" secondItem="L3z-Yq-uR0" secondAttribute="trailing" id="Pgs-YL-r3D"/>
-                            <constraint firstItem="NYT-WS-Qow" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bqa-aY-sQY" secondAttribute="trailing" constant="12" symbolic="YES" id="Xpz-5t-lwm"/>
-                            <constraint firstItem="Bqa-aY-sQY" firstAttribute="leading" secondItem="b2a-4A-Iyw" secondAttribute="leading" constant="134" id="YV4-pR-Pje"/>
+                            <constraint firstItem="NYT-WS-Qow" firstAttribute="leading" secondItem="Bqa-aY-sQY" secondAttribute="trailing" constant="12" symbolic="YES" id="Xpz-5t-lwm"/>
+                            <constraint firstItem="Bqa-aY-sQY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="b2a-4A-Iyw" secondAttribute="leading" constant="20" id="YV4-pR-Pje"/>
                             <constraint firstItem="z9A-c6-VSZ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="eFi-aG-3CP" secondAttribute="bottom" constant="8" id="fzX-T9-mjq"/>
                             <constraint firstAttribute="trailing" secondItem="L3z-Yq-uR0" secondAttribute="trailing" constant="20" id="hDc-1V-z7D"/>
                             <constraint firstItem="eFi-aG-3CP" firstAttribute="leading" secondItem="b2a-4A-Iyw" secondAttribute="leading" constant="20" id="jmX-wm-Qg9"/>

@@ -7,25 +7,6 @@
 //
 
 import CoreBluetooth
-import IOKit
-
-extension String {
-    static var macSerialNumber: String {
-        // Get the platform expert
-        let platformExpert: io_service_t = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
-        // Get the serial number as a CFString ( actually as Unmanaged<AnyObject>! )
-        let serialNumberAsCFString = IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformSerialNumberKey as CFString, kCFAllocatorDefault, 0);
-        // Release the platform expert (we're responsible)
-        IOObjectRelease(platformExpert);
-        // Take the unretained value of the unmanaged-any-object
-        // (so we're not responsible for releasing it)
-        // and pass it back as a String or, if it fails, an empty string
-        guard let serialNumber = serialNumberAsCFString?.takeUnretainedValue() as? String
-            else { fatalError("can't get Mac unique identifier") }
-
-        return serialNumber
-    }
-}
 
 protocol BLEManagerDelegate: class {
     func didStartScanningForButton(_ manager: BLEManager)
@@ -41,17 +22,20 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     unowned var delegate: BLEManagerDelegate
 
     var buttonDidTrigger: ((BLEManager) -> Void)? = nil
-    
-//    static let shared = BLEManager()
-    
+
     private var peripheral: CBPeripheral? = nil
     private var centralManager: CBCentralManager
     private var services: [CBService] = []
     private var idleCharacteristic: CBCharacteristic? = nil
+    private var clientUUID: String
 
     func notifyFinishedTask() {
         setIdle()
         delegate.buttonDidFinishTask(self)
+    }
+    
+    private struct Const {
+        static let clientUUIDKey = "ClientUUID"
     }
     
     @discardableResult
@@ -67,7 +51,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func setIdle() {
         if let idle = idleCharacteristic, let peripheral = peripheral {
-            let payload = String.macSerialNumber.appending(":1")
+            let payload = clientUUID.appending(":1")
             if let payloadBytes = payload.data(using: .ascii) {
                 peripheral.writeValue(payloadBytes,
                                       for: idle,
@@ -78,6 +62,13 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     init(delegate: BLEManagerDelegate) {
         self.delegate = delegate
+        if let uuid = UserDefaults.standard.string(forKey: Const.clientUUIDKey) {
+            clientUUID = uuid
+        } else {
+            clientUUID = UUID().uuidString
+            UserDefaults.standard.set(clientUUID, forKey: Const.clientUUIDKey)
+            UserDefaults.standard.synchronize()
+        }
         centralManager = CBCentralManager(delegate: nil, queue: nil)
         super.init()
         centralManager.delegate = self
@@ -95,14 +86,12 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if peripheral.identifier.uuidString == "C338320C-F501-4537-8F80-D2BBF0469FFA" {
-            print("central manager did discover peripheral: \(peripheral)")
-            self.peripheral = peripheral
-            peripheral.delegate = self
-            central.connect(peripheral, options: nil)
-            central.stopScan()
-            delegate.didStopScanningForButton(self)
-        }
+        print("central manager did discover peripheral: \(peripheral)")
+        self.peripheral = peripheral
+        peripheral.delegate = self
+        central.connect(peripheral, options: nil)
+        central.stopScan()
+        delegate.didStopScanningForButton(self)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -146,13 +135,16 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         print("didUpdateValueForCharacteristic: \(characteristic)")
         print("properties: \(characteristic.properties.rawValue))")
-//        let data = characteristic.value!
-//        let string = String(bytes: data, encoding: .ascii)
-//        print("value: \(string ?? "brak")")
+        let data = characteristic.value!
+        let string = String(bytes: data, encoding: .ascii)
+        print("value: \(string ?? "brak")")
         print("error: \(String(describing: error))")
-
-        delegate.buttonPushed(self)
-        buttonDidTrigger?(self)
+        
+        // handle only values matching client UUID
+        if let value = string, value == clientUUID {
+            delegate.buttonPushed(self)
+            buttonDidTrigger?(self)
+        }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {

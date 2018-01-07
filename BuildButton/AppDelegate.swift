@@ -86,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, BLEManagerDelegate {
         preferencesViewController.statusButtonTitle = "Finish running task"
         preferencesViewController.reloadUI(withButton: button)
         button.runCommand("cd projects && sleep 7")
-//        button.runCommand("cd work/Base-iOS-client && bundle exec fastlane hockeyapp version:3.4.4_beta1")
+//        button.runCommand("cd work/Base-iOS-client && bundle exec fastlane hockeyapp version:3.5.2_rc2")
     }
     
     func buttonDidFinishTask(_ manager: BLEManager) {

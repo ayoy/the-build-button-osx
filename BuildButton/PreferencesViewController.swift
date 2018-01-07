@@ -49,19 +49,9 @@ class PreferencesViewController: NSViewController {
     }
 
     @IBAction func runTask(_ sender: NSButton) {
-        if (sender.title == "Idle") {
-            print("Running task")
-            button?.runCommand("cd projects; sleep 3")
-//            sender.isEnabled = false
-            sender.title = "Finish running task"
-        } else {
-            print("Task finished")
-            sender.title = "Idle"
-            let finishCommand = FinishCommand()
-            finishCommand.execute()
-//            sender.isEnabled = true
-        }
-        sender.sizeToFit()
+        print("Task finished")
+        let finishCommand = FinishCommand()
+        finishCommand.execute()
     }
 }
 
