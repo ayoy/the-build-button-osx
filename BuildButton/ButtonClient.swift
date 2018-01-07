@@ -55,7 +55,7 @@ class ButtonClient: NSObject {
         let scriptData = try! Data(contentsOf: scriptURL)
         guard var scriptString = String(bytes: scriptData, encoding: .utf8) else { fatalError("failed to read run_in_terminal script") }
         
-        let argument = "\(commandToRun); osascript -e 'tell application \\\"BuildButton\\\"' -e 'finish' -e 'end tell'"
+        let argument = "\(commandToRun); osascript -e 'tell application \\\"BuildButton\\\" to finish'"
         scriptString.append("runInTerminal(\"\(argument)\")")
         
         guard let script = NSAppleScript(source: scriptString)
